@@ -25,6 +25,12 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+               - name: Fix Java and Kotlin targets
+            run: |
+              FILE=$(find extracted -path '*/app/build.gradle.kts' -print -quit)
+              test -n "$FILE"
+              sed -i 's/JavaVersion.VERSION_1_8/JavaVersion.VERSION_17/g' "$FILE"
+              sed -i 's/jvmTarget = "1.8"/jvmTarget = "17"/g' "$FILE"
       - name: Build APK
         run: |
           PROJECT_DIR=$(dirname "$(find extracted -name settings.gradle.kts -print -quit)")
